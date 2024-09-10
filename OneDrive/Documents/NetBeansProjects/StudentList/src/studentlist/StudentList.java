@@ -17,7 +17,7 @@ public class StudentList {
         // TODO code application logic here
         Student[] studentList = new Student[5];//change size before running
         Student s1 = new Student();
-        s1.setName("Fagun Vankawala");
+        s1.setName("Alshifa Belim");
         Student s2 = new Student();
         s2.setName("Palak Shah");
         Student s3 = new Student();
