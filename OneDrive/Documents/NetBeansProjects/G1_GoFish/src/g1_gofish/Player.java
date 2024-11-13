@@ -1,47 +1,73 @@
-/**
- * SYST 17796 Project Base code.
- * Students can modify and extend to implement their game.
- * Add your name as an author and the date!
- */
+// @author: Alshifa Belim, Carlo Maximo, Palakpreet Kaur
 package g1_gofish;
 
-/**
- * A class that models each Player in the game. Players have an identifier, which should be unique.
- *
- */
-public abstract class Player {
+import java.util.ArrayList;
 
-    private String name; //the unique name for this player
+// Player class
+public class Player {
+    // Player attributes
+    private String name;
+    private ArrayList<Card> hand;
+    private Integer score;
 
-    /**
-     * A constructor that allows you to set the player's unique ID
-     *
-     * @param name the unique ID to assign to this player.
-     */
+    // Player constructor
     public Player(String name) {
         this.name = name;
+        hand = new ArrayList<>();
+        score = 0;
     }
 
-    /**
-     * @return the player name
-     */
+    // Player methods
     public String getName() {
         return name;
     }
 
-    /**
-     * Ensure that the playerID is unique
-     *
-     * @param name the player name to set
-     */
-    public void setName(String name) {
-        this.name = name;
+    public void addCard(Card card) {
+        hand.add(card);
     }
 
-    /**
-     * The method to be overridden when you subclass the Player class with your specific type of Player and filled in
-     * with logic to play your game.
-     */
-    public abstract void play();
+    public void removeCard(Card card) {
+        hand.remove(card);
+    }
 
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
+
+    public void askForCard(Player player, Card.Rank rank, Deck deck) {
+        boolean hasCard = false;
+        for (Card card : player.hand) {
+            if (card.getRank() == rank) {
+                hand.add(card);
+                player.hand.remove(card);
+                return;
+            }
+        }
+        if (!hasCard) {
+            System.out.println("Go fish!");
+            Card card = deck.deal();
+            if (card != null) {
+                hand.add(card);
+            }
+        }
+    }
+
+    public void hasFour() {
+        for (Card.Rank rank : Card.Rank.values()) {
+            int count = 0;
+            ArrayList<Card> toRemove = new ArrayList<>();
+            for (Card card : hand) {
+                if (card.getRank() == rank) {
+                    count++;
+                    toRemove.add(card);
+                }
+            }
+            if (count == 4) {
+                for (Card card : toRemove) {
+                    hand.remove(card);
+                }
+                score++;
+            }
+        }
+    }
 }

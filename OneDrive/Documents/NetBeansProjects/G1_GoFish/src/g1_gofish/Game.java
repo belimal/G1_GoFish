@@ -1,56 +1,63 @@
-/**
- * SYST 17796 Project Base code.
- * Students can modify and extend to implement their game.
- * Add your name as an author and the date!
- */
+// @author: Alshifa Belim, Carlo Maximo, Palakpreet Kaur
 package g1_gofish;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-/**
- * The class that models your game. You should create a more specific child of this class and instantiate the methods
- * given.
- *
- */
-public abstract class Game {
+// Game rules and logic
+public class Game {
+    private ArrayList<Player> players;
+    public Deck deck;
+    private int numPlayers = 2;
+    private ArrayList<Card> discards;
 
-    private final String name;//the title of the game
-    private ArrayList<Player> players;// the players of the game
-
-    public Game(String name) {
-        this.name = name;
-        players = new ArrayList();
+    public boolean allPlayersHaveCards() {
+        for (Player player : players) {
+            if (player.getHand().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
+    public Game() {
+        Scanner in = new Scanner(System.in);
+        players = new ArrayList<Player>();
+        deck = new Deck();
+        deck.shuffle();
+        discards = new ArrayList<Card>();
 
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
+
+        // Create player profile
+        System.out.println("Enter your name: ");
+        String name = in.nextLine();
+        players.add(new Player(name));
+        players.add(new Player("Computer"));
+
+        // Deal cards
+        for (int i = 0; i < 5; i++) {
+            for (Player player : players) {
+                player.addCard(deck.deal());
+            }
+        }
+        // Play game
+        while ((deck.deal() != null) && (allPlayersHaveCards())) {
+            for (Player player : players) {
+                System.out.println(player.getName() + "'s turn");
+                System.out.println("Your hand: ");
+                player.getHand().forEach(card -> System.out.println(card.getRank() + " of " + card.getSuit()));
+
+                System.out.println("Which player do you want to ask for a card? ");
+                for (int i = 0; i < players.size(); i++) {
+                    System.out.println(i + ": " + players.get(i).getName());
+                }
+                int playerIndex = in.nextInt();
+
+                System.out.println("Ask a player for a card: ");
+                String rank = in.nextLine();
+                player.askForCard(players.get(playerIndex), Card.Rank.valueOf(rank), deck);
+            }
+        }
     }
-
-    /**
-     * @return the players of this game
-     */
-    public ArrayList<Player> getPlayers() {
-        return players;
-    }
-
-    /**
-     * @param players the players of this game
-     */
-    public void setPlayers(ArrayList<Player> players) {
-        this.players = players;
-    }
-
-    /**
-     * Play the game. This might be one method or many method calls depending on your game.
-     */
-    public abstract void play();
-
-    /**
-     * When the game is over, use this method to declare and display a winning player.
-     */
-    public abstract void declareWinner();
-
-}//end class
+    
+}
