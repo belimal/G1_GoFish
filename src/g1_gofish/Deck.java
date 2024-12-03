@@ -1,4 +1,6 @@
 // @author: Alshifa Belim, Carlo Maximo, Palakpreet Kaur
+// Final ver.
+
 package g1_gofish;
 
 import java.util.ArrayList;
@@ -11,9 +13,14 @@ public class Deck {
         deck = new ArrayList<Card>();
         for (Card.Suit suit : Card.Suit.values()) {
             for (Card.Rank rank : Card.Rank.values()) {
-                deck.add(new Card(rank, suit));
+                // Used CardFactory to create the cards
+                deck.add(CardFactory.createCard(rank, suit));
             }
         }
+    }
+
+    public ArrayList<Card> getDeck() {
+        return deck;
     }
 
     public void shuffle() {
@@ -27,11 +34,17 @@ public class Deck {
 
     public Card deal() {
         if (!deck.isEmpty()) {
-
             Card card = deck.get(0);
             deck.remove(0);
             return card;
         }
         return null;
+    }
+
+    public boolean isEmpty() {
+        if (deck.isEmpty()) {
+                return true;
+        }
+        return false;
     }
 }
