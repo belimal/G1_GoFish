@@ -21,7 +21,7 @@ public class Game {
     private Scanner in;
 
     public void displayMenu() {
-        System.out.println("Welcome to GOFish by group #1");
+        System.out.println("Welcome to GoFish by Group #1");
         System.out.println("1. Play Game");
         System.out.println("2. Exit");
     }
